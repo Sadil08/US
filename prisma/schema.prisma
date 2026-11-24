@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL_UNPOOLED")
+}
+
+enum Author {
+  ME
+  HER
+}
+
+model Photo {
+  id          String   @id @default(cuid())
+  key         String   @unique // base R2 object key, without size/extension suffix
+  caption     String?
+  takenAt     DateTime // date the photo represents, for Memory Lane ordering
+  milestone   String? // e.g. "First date", "Our first trip" - groups photos on the timeline
+  width       Int
+  height      Int
+  blurDataUrl String // tiny base64 placeholder for instant, non-pixelated loading
+  uploadedBy  Author
+  createdAt   DateTime @default(now())
+
+  @@index([takenAt])
+}
+
+model DiaryEntry {
+  id        String   @id @default(cuid())
+  title     String
+  body      String // markdown-ish plain text
+  entryDate DateTime // the date the entry is about, not necessarily today
+  author    Author
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([entryDate])
+}
+
+model Event {
+  id        String   @id @default(cuid())
+  title     String
+  date      DateTime // date this event happened or will happen
+  note      String?
+  isFuture  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([date])
+}
