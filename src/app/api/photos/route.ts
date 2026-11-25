@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { processImage, uploadToR2 } from "@/lib/r2";
+import { thumbKeyFor } from "@/lib/photo-keys";
 
 export async function GET() {
   const photos = await prisma.photo.findMany({ orderBy: { takenAt: "asc" } });
@@ -26,10 +27,11 @@ export async function POST(request: Request) {
   }
 
   const original = Buffer.from(await file.arrayBuffer());
-  const { buffer, width, height, blurDataUrl } = await processImage(original);
+  const { buffer, thumbBuffer, width, height, blurDataUrl } = await processImage(original);
 
   const key = `photos/${crypto.randomUUID()}.webp`;
   await uploadToR2(key, buffer, "image/webp");
+  await uploadToR2(thumbKeyFor(key), thumbBuffer, "image/webp");
 
   const photo = await prisma.photo.create({
     data: {

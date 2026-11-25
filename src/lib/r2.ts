@@ -32,10 +32,15 @@ const QUALITY = 82;
 
 export type ProcessedImage = {
   buffer: Buffer;
+  thumbBuffer: Buffer;
   width: number;
   height: number;
   blurDataUrl: string;
 };
+
+// Small copy for decorative uses (floating backgrounds, polaroids) so pages
+// don't pull full-size photos just to show them at a few hundred pixels.
+const THUMB_DIMENSION = 600;
 
 export async function processImage(input: Buffer): Promise<ProcessedImage> {
   const rotated = sharp(input).rotate(); // auto-orient from EXIF, then strip it
@@ -57,7 +62,13 @@ export async function processImage(input: Buffer): Promise<ProcessedImage> {
     .toBuffer();
   const blurDataUrl = `data:image/webp;base64,${blurBuffer.toString("base64")}`;
 
-  return { buffer: webp, width, height, blurDataUrl };
+  const thumbBuffer = await resized
+    .clone()
+    .resize({ width: THUMB_DIMENSION, height: THUMB_DIMENSION, fit: "inside", withoutEnlargement: true })
+    .webp({ quality: 72 })
+    .toBuffer();
+
+  return { buffer: webp, thumbBuffer, width, height, blurDataUrl };
 }
 
 export async function uploadToR2(key: string, buffer: Buffer, contentType: string) {

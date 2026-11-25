@@ -3,11 +3,13 @@ import FloatingPetals from "@/components/FloatingPetals";
 import TimeTogether from "@/components/TimeTogether";
 import { SITE_CONFIG } from "@/lib/site-config";
 import HeroReveal from "@/components/HeroReveal";
+import { PolaroidStrip, ScatteredPolaroids } from "@/components/HeroPolaroids";
 
 export default function Home() {
   return (
     <main className="relative flex-1 flex flex-col items-center justify-center overflow-hidden px-6 py-16 text-center">
       <FloatingPetals />
+      <ScatteredPolaroids />
       <HeroReveal>
         <p className="font-script text-3xl text-[var(--gold)] mb-2">for</p>
         <h1 className="font-display text-5xl sm:text-7xl mb-4">
@@ -31,6 +33,7 @@ export default function Home() {
           </Link>
         </div>
       </HeroReveal>
+      <PolaroidStrip />
     </main>
   );
 }

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Playfair_Display, Cormorant_Garamond, Dancing_Script } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/Nav";
+import FloatingMemories from "@/components/FloatingMemories";
 
 const playfair = Playfair_Display({
   variable: "--font-display",
@@ -33,8 +34,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${playfair.variable} ${cormorant.variable} ${dancingScript.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-[var(--bg)] text-[var(--ink)]">
+        <FloatingMemories />
         <Nav />
-        {children}
+        <div className="relative z-10 flex flex-1 flex-col">{children}</div>
       </body>
     </html>
   );
