@@ -19,13 +19,13 @@ export default function Nav() {
 
   return (
     <nav className="sticky top-0 z-50 flex justify-center px-4 py-4">
-      <div className="card flex gap-1 px-2 py-1.5">
+      <div className="card flex max-w-full gap-1 overflow-x-auto px-2 py-1.5">
         {LINKS.map((link) => (
           <Link
             key={link.href}
             href={link.href}
             className={clsx(
-              "rounded-full px-3 py-1.5 text-sm transition-colors",
+              "shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 text-sm transition-colors",
               pathname === link.href
                 ? "bg-[var(--rose)] text-[var(--bg)]"
                 : "text-[var(--ink-muted)] hover:text-[var(--ink)]"
