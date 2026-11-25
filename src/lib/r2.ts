@@ -2,6 +2,7 @@ import {
   S3Client,
   PutObjectCommand,
   GetObjectCommand,
+  DeleteObjectCommand,
 } from "@aws-sdk/client-s3";
 import sharp from "sharp";
 
@@ -90,4 +91,9 @@ export async function getFromR2(key: string) {
     new GetObjectCommand({ Bucket: BUCKET(), Key: key })
   );
   return result;
+}
+
+export async function deleteFromR2(key: string) {
+  const client = getClient();
+  await client.send(new DeleteObjectCommand({ Bucket: BUCKET(), Key: key }));
 }

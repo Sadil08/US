@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import PhotoReveal from "@/components/PhotoReveal";
+import PhotoCard from "@/components/PhotoCard";
 import UploadPhotoForm from "@/components/UploadPhotoForm";
 
 export const dynamic = "force-dynamic";
@@ -58,13 +58,16 @@ export default async function MemoryLanePage() {
             </h2>
             <div className="grid sm:grid-cols-2 gap-6">
               {group.photos.map((photo, pi) => (
-                <PhotoReveal
+                <PhotoCard
                   key={photo.id}
-                  src={`/api/image/${photo.key}`}
+                  id={photo.id}
+                  photoKey={photo.key}
                   width={photo.width}
                   height={photo.height}
                   blurDataUrl={photo.blurDataUrl}
                   caption={photo.caption}
+                  milestone={photo.milestone}
+                  takenAt={photo.takenAt.toISOString()}
                   index={pi}
                 />
               ))}
